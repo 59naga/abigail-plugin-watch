@@ -19,11 +19,10 @@ Abigail Plugin Watch
   </a>
 </p>
 
-Installation
+No installation
 ---
-```bash
-npm install abigail-plugin-watch --save
-```
+
+> abigail built-in plugin
 
 See also
 ---
