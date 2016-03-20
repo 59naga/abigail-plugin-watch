@@ -11,25 +11,26 @@ export default class Watch extends Plugin {
   static defaultOptions = {
     /**
     * @static
-    * @property defaultOptions.globs
+    * @property defaultOptions.value
     */
-    globs: [
+    value: [
       'package.json',
       'src/**/*.js',
       'test/**/*.js',
     ],
-
-    /**
-    * @property defaultOptions.watcher
-    */
-    watcher: true,
   }
 
   /**
-  * @method pluginWillAttach
-  * @returns {promise<array>} exitCodes - first task finished
-  */
-  pluginWillAttach() {
+  * @constructor
+  **/
+  constructor(...args) {
+    super(...args);
+
+    if (typeof this.opts.value === 'string') {
+      this.opts.value = this.opts.value.split(',');
+    } else {
+      this.opts.value = [].slice.call(this.opts.value);
+    }
     // if parent is mock, ignore
     if (this.parent.set) {
       this.parent.set({
@@ -37,21 +38,25 @@ export default class Watch extends Plugin {
         exit: false,
       });
     }
+  }
 
-    if (this.opts.watcher) {
-      const gazeOptions = {
-        cwd: this.parent.packageDir,
-      };
-      this.gaze = gaze(this.opts.globs, gazeOptions, (error) => {
-        if (error) {
-          throw error;
-        }
+  /**
+  * @method pluginWillAttach
+  * @returns {promise<array>} exitCodes - first task finished
+  */
+  pluginWillAttach() {
+    const gazeOptions = {
+      cwd: this.parent.packageDir,
+    };
+    this.gaze = gaze(this.opts.value, gazeOptions, (error) => {
+      if (error) {
+        throw error;
+      }
 
-        this.gaze.on('all', (event, filepath) => {
-          this.onChange(event, filepath);
-        });
+      this.gaze.on('all', (event, filepath) => {
+        this.onChange(event, filepath);
       });
-    }
+    });
 
     return this.onChange();
   }
@@ -88,7 +93,7 @@ export default class Watch extends Plugin {
     .then(() => this.parent.start())
     .finally(() => {
       this.busy = false;
-      this.waitLog(this.opts.globs);
+      this.waitLog(this.opts.value);
     });
   }
 

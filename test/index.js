@@ -7,11 +7,6 @@ import stripAnsi from 'strip-ansi';
 // target
 import Watch from '../src';
 
-// environment
-const disableWatcher = {
-  watcher: false,
-};
-
 // specs
 describe('', () => {
   it('should start the task instead of parent(abigail)', () => {
@@ -19,7 +14,7 @@ describe('', () => {
     emitter.set = sinon.spy();
     emitter.start = sinon.spy();
 
-    const watch = new Watch(emitter, disableWatcher);// eslint-disable-line no-unused-vars
+    const watch = new Watch(emitter);// eslint-disable-line no-unused-vars
     return emitter.emit('beforeImmediate')
     .then(() => {
       assert(emitter.set.calledOnce);
@@ -34,7 +29,7 @@ describe('', () => {
     emitter.set = sinon.spy();
     emitter.start = sinon.spy();
 
-    const watch = new Watch(emitter, disableWatcher);// eslint-disable-line no-unused-vars
+    const watch = new Watch(emitter);// eslint-disable-line no-unused-vars
 
     setTimeout(() => {watch.onChange();});
 
@@ -60,13 +55,20 @@ describe('', () => {
     const logEvent = sinon.spy();
     emitter.on('log', logEvent);
 
-    const watch = new Watch(emitter, disableWatcher);// eslint-disable-line no-unused-vars
+    const watch = new Watch(emitter);// eslint-disable-line no-unused-vars
     return emitter.emit('beforeImmediate')
     .then(() => {
       assert(logEvent.calledOnce);
 
       const notifyMessage = stripAnsi(logEvent.args[0][0]);
-      assert(notifyMessage === `... watch at ${watch.opts.globs.join(', ')}.`);
+      assert(notifyMessage === `... watch at ${watch.opts.value.join(', ')}.`);
     });
+  });
+
+  it('if specify glob as argument, should be change a locations', () => {
+    const emitter = new AsyncEmitter;
+    const watch = new Watch(emitter, 'foo,bar,baz');// eslint-disable-line no-unused-vars
+
+    assert.deepEqual(watch.opts.value, ['foo', 'bar', 'baz']);
   });
 });
