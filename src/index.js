@@ -1,12 +1,11 @@
+// dependencies
+import Plugin from 'abigail-plugin';
+import chalk from 'chalk';
 import Promise from 'bluebird';
 import gaze from 'gaze';
 import { relative as relativePath } from 'path';
-import chalk from 'chalk';
-import Plugin from 'abigail-plugin';
 
-/**
-* @class Watch
-*/
+// @class Watch
 export default class Watch extends Plugin {
   static defaultOptions = {
     /**
@@ -14,30 +13,9 @@ export default class Watch extends Plugin {
     * @property defaultOptions.value
     */
     value: [
-      'package.json',
       'src/**/*.js',
       'test/**/*.js',
     ],
-  }
-
-  /**
-  * @constructor
-  **/
-  constructor(...args) {
-    super(...args);
-
-    if (typeof this.opts.value === 'string') {
-      this.opts.value = this.opts.value.split(',');
-    } else {
-      this.opts.value = [].slice.call(this.opts.value);
-    }
-    // if parent is mock, ignore
-    if (this.parent.set) {
-      this.parent.set({
-        immediate: false,
-        exit: false,
-      });
-    }
   }
 
   /**
@@ -45,10 +23,23 @@ export default class Watch extends Plugin {
   * @returns {promise<array>} exitCodes - first task finished
   */
   pluginWillAttach() {
+    try {
+      this.getPlugin('exit').abort();
+      this.getPlugin('launch').abort();
+    } catch (e) {
+      // ignore
+    }
+
+    let globs;
+    if (typeof this.opts.value === 'string') {
+      globs = this.opts.value.split(',');
+    } else {
+      globs = [].slice.call(this.opts.value);
+    }
     const gazeOptions = {
       cwd: this.parent.packageDir,
     };
-    this.gaze = gaze(this.opts.value, gazeOptions, (error) => {
+    this.gaze = gaze(globs, gazeOptions, (error) => {
       if (error) {
         throw error;
       }
@@ -67,14 +58,14 @@ export default class Watch extends Plugin {
   */
   pluginWillDetach() {
     if (this.gaze) {
-      this.gaze.end();
+      this.gaze.close();
     }
   }
 
   /**
   * @method onChange
-  * @param {string} event
-  * @param {string} [filepath=null]
+  * @param {string} [event] - a gaze event name
+  * @param {string} [filepath=null] - a changed filename
   * @returns {promise<undefined>} task
   */
   onChange(event, filepath = null) {
@@ -90,16 +81,21 @@ export default class Watch extends Plugin {
     }
 
     return promise
-    .then(() => this.parent.start())
+    .then(() => this.getPlugin('launch').launch(this.parent.task))
     .finally(() => {
       this.busy = false;
       this.waitLog(this.opts.value);
+
+      // fix (node) warning: possible EventEmitter memory leak detected.
+      this.opts.process.stdin.removeAllListeners();
+      this.opts.process.stdout.removeAllListeners();
+      this.opts.process.stderr.removeAllListeners();
     });
   }
 
   /**
   * @method waitLog
-  * @param {array} globs
+  * @param {array} globs - a watch locations
   * @returns {undefined}
   */
   waitLog(globs) {
