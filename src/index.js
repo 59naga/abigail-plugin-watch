@@ -30,16 +30,15 @@ export default class Watch extends Plugin {
       // ignore
     }
 
-    let globs;
     if (typeof this.opts.value === 'string') {
-      globs = this.opts.value.split(',');
+      this.globs = this.opts.value.split(',');
     } else {
-      globs = [].slice.call(this.opts.value);
+      this.globs = [].slice.call(this.opts.value);
     }
     const gazeOptions = {
       cwd: this.parent.packageDir,
     };
-    this.gaze = gaze(globs, gazeOptions, (error) => {
+    this.gaze = gaze(this.globs, gazeOptions, (error) => {
       if (error) {
         throw error;
       }
@@ -84,7 +83,7 @@ export default class Watch extends Plugin {
     .then(() => this.getPlugin('launch').launch(this.parent.task))
     .finally(() => {
       this.busy = false;
-      this.waitLog(this.opts.value);
+      this.waitLog(this.globs);
 
       // fix (node) warning: possible EventEmitter memory leak detected.
       this.opts.process.stdin.removeAllListeners();
