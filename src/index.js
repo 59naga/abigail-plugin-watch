@@ -35,8 +35,9 @@ export default class Watch extends Plugin {
     } else {
       this.globs = [].slice.call(this.opts.value);
     }
+    const json = this.getProps().json || {};
     const gazeOptions = {
-      cwd: this.parent.packageDir,
+      cwd: json.dir,
     };
     this.gaze = gaze(this.globs, gazeOptions, (error) => {
       if (error) {
@@ -80,7 +81,7 @@ export default class Watch extends Plugin {
     }
 
     return promise
-    .then(() => this.getPlugin('launch').launch(this.parent.task))
+    .then(() => this.getPlugin('launch').launch(this.getProps().task))
     .finally(() => {
       this.busy = false;
       this.waitLog(this.globs);
