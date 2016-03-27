@@ -1,4 +1,4 @@
-Abigail Plugin Watch
+Abigail Watch Plugin
 ---
 
 <p align="right">
