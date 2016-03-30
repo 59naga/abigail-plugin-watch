@@ -81,7 +81,10 @@ export default class Watch extends Plugin {
     }
 
     return promise
-    .then(() => this.getPlugin('launch').launch(this.getProps().task))
+    .then(() => {
+      const launchPlugin = this.getPlugin('launch');
+      return launchPlugin.launch(this.getProps().task, launchPlugin.opts);
+    })
     .finally(() => {
       this.busy = false;
       this.waitLog(this.globs);
