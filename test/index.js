@@ -59,7 +59,7 @@ describe('', () => {
     const logEvent = sinon.spy();
     emitter.on('log', logEvent);
 
-    const watch = new Watch(emitter);// eslint-disable-line no-unused-vars
+    const watch = new Watch(emitter);
     watch.setProps({
       plugins: {
         launch: {
@@ -74,6 +74,23 @@ describe('', () => {
 
       const notifyMessage = stripAnsi(logEvent.args[0][0]);
       assert(notifyMessage === `... watch at ${watch.opts.value.join(', ')}.`);
+    });
+  });
+
+  it('if lazy is true, should not subscribe the launch', () => {
+    const emitter = new AsyncEmitter;
+    const watch = new Watch(emitter, true, { lazy: true });
+    watch.setProps({
+      plugins: {
+        launch: {
+          launch: sinon.spy(),
+        },
+      },
+    });
+    return emitter.emit('attach-plugins')
+    .then(() => emitter.emit('launch'))
+    .then(() => {
+      assert(watch.getProps().plugins.launch.launch.notCalled);
     });
   });
 });
