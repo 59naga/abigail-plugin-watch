@@ -73,6 +73,29 @@ if specify in the abigail field of your package.json:
 }
 ```
 
+full options
+---
+
+```js
+{
+  "name": "use-jsx",
+  "scripts": {
+    "test": "ava"
+  },
+  "abigail": {
+    "plugins": {
+      "watch": {
+        "enable": true,
+        // can specify exclude  use `!` prefix
+        "value": ["*.jsx","src/**/*.jsx","test/**/*.jsx","!test/fixtures"],
+        // if true, not launch immediately
+        "lazy": true
+      }
+    }
+  }
+}
+```
+
 See also
 ---
 * [abigailjs/abigail](https://github.com/abigailjs/abigail#usage)

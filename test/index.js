@@ -22,6 +22,7 @@ describe('', () => {
     });
 
     return emitter.emit('attach-plugins')
+    .then(() => emitter.emit('launch'))
     .then(() => {
       assert(watch.getProps().plugins.launch.launch.calledOnce);
     });
@@ -38,9 +39,8 @@ describe('', () => {
       },
     });
 
-    setTimeout(() => {watch.onChange();});
-
     return emitter.emit('attach-plugins')
+    .then(() => emitter.emit('launch'))
     .then(() => {
       assert(watch.getProps().plugins.launch.launch.calledOnce);
 
@@ -68,6 +68,7 @@ describe('', () => {
       },
     });
     return emitter.emit('attach-plugins')
+    .then(() => emitter.emit('launch'))
     .then(() => {
       assert(logEvent.calledOnce);
 

@@ -49,7 +49,11 @@ export default class Watch extends Plugin {
       });
     });
 
-    return this.onChange();
+    if (this.opts.lazy) {
+      return;
+    }
+
+    this.subscribe('launch', () => this.onChange(), true);
   }
 
   /**
