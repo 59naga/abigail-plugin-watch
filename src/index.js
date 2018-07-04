@@ -31,7 +31,7 @@ export default class Watch extends Plugin {
     }
 
     if (typeof this.opts.value === 'string') {
-      this.globs = this.opts.value.split(',');
+      this.globs = [this.opts.value];
     } else {
       this.globs = [].slice.call(this.opts.value);
     }
