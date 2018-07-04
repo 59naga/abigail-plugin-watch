@@ -93,4 +93,13 @@ describe('', () => {
       assert(watch.getProps().plugins.launch.launch.notCalled);
     });
   });
+
+  it('should no handle watch glob(abigail#19)', () => {
+    const emitter = new AsyncEmitter;
+    const watch = new Watch(emitter, 'src/**/*.{js,jsx}');
+
+    return emitter.emit('attach-plugins').then(() => {
+      assert(watch.globs[0] === 'src/**/*.{js,jsx}');
+    });
+  });
 });
