@@ -28,9 +28,9 @@ Usage
 if specify the separated glob with a comma, change the target.
 
 ```bash
-abby test --watch "*.jsx,src/**/*.jsx,test/**/*.jsx"
+abby test --watch "{*.jsx,src/**/*.jsx,test/**/*.jsx}"
 # ...
-# +    1 ms @_@ ... watch at *.jsx, src/**/*.jsx, test/**/*.jsx.
+# +    1 ms @_@ ... watch at {*.jsx,src/**/*.jsx,test/**/*.jsx}.
 ```
 
 if disable only this plugin(use `--no-watch` option), run only once the task.
@@ -87,7 +87,7 @@ full options
       "watch": {
         "enable": true,
         // can specify exclude  use `!` prefix
-        "value": ["*.jsx","src/**/*.jsx","test/**/*.jsx","!test/fixtures"],
+        "value": "{*.jsx,src/**/*.jsx,test/**/*.jsx,!test/fixtures}",
         // if true, not launch immediately
         "lazy": true
       }
