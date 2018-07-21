@@ -82,19 +82,19 @@ export default class Watch extends Plugin {
     }
 
     return promise
-    .then(() => {
-      const launchPlugin = this.getPlugin('launch');
-      return launchPlugin.launch(this.getProps().task, launchPlugin.opts);
-    })
-    .finally(() => {
-      this.busy = false;
-      this.waitLog(this.globs);
+      .then(() => {
+        const launchPlugin = this.getPlugin('launch');
+        return launchPlugin.launch(this.getProps().task, launchPlugin.opts);
+      })
+      .finally(() => {
+        this.busy = false;
+        this.waitLog(this.globs);
 
-      // fix (node) warning: possible EventEmitter memory leak detected.
-      this.opts.process.stdin.removeAllListeners();
-      this.opts.process.stdout.removeAllListeners();
-      this.opts.process.stderr.removeAllListeners();
-    });
+        // fix (node) warning: possible EventEmitter memory leak detected.
+        this.opts.process.stdin.removeAllListeners();
+        this.opts.process.stdout.removeAllListeners();
+        this.opts.process.stderr.removeAllListeners();
+      });
   }
 
   /**
