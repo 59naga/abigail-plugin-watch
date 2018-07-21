@@ -21,8 +21,8 @@ describe('', () => {
       },
     });
 
-    return emitter.emit('attach-plugins')
-    .then(() => emitter.emit('launch'))
+    return emitter.emitParallel('attach-plugins')
+    .then(() => emitter.emitParallel('launch'))
     .then(() => {
       assert(watch.getProps().plugins.launch.launch.calledOnce);
     });
@@ -39,8 +39,8 @@ describe('', () => {
       },
     });
 
-    return emitter.emit('attach-plugins')
-    .then(() => emitter.emit('launch'))
+    return emitter.emitParallel('attach-plugins')
+    .then(() => emitter.emitParallel('launch'))
     .then(() => {
       assert(watch.getProps().plugins.launch.launch.calledOnce);
 
@@ -67,13 +67,13 @@ describe('', () => {
         },
       },
     });
-    return emitter.emit('attach-plugins')
-    .then(() => emitter.emit('launch'))
+    return emitter.emitParallel('attach-plugins')
+    .then(() => emitter.emitParallel('launch'))
     .then(() => {
       assert(logEvent.calledOnce);
 
       const notifyMessage = stripAnsi(logEvent.args[0][0]);
-      assert(notifyMessage === `... watch at ${watch.opts.value.join(', ')}.`);
+      assert(notifyMessage === `... watch at ${watch.opts.value}.`);
     });
   });
 
@@ -87,8 +87,8 @@ describe('', () => {
         },
       },
     });
-    return emitter.emit('attach-plugins')
-    .then(() => emitter.emit('launch'))
+    return emitter.emitParallel('attach-plugins')
+    .then(() => emitter.emitParallel('launch'))
     .then(() => {
       assert(watch.getProps().plugins.launch.launch.notCalled);
     });
@@ -98,7 +98,7 @@ describe('', () => {
     const emitter = new AsyncEmitter;
     const watch = new Watch(emitter, 'src/**/*.{js,jsx}');
 
-    return emitter.emit('attach-plugins').then(() => {
+    return emitter.emitParallel('attach-plugins').then(() => {
       assert(watch.globs[0] === 'src/**/*.{js,jsx}');
     });
   });

@@ -12,10 +12,7 @@ export default class Watch extends Plugin {
     * @static
     * @property defaultOptions.value
     */
-    value: [
-      'src/**/*.js',
-      'test/**/*.js',
-    ],
+    value: '{src,test}/**/*.{js,mjs}',
   }
 
   /**
@@ -81,7 +78,7 @@ export default class Watch extends Plugin {
     let promise = Promise.resolve();
     if (filepath) {
       const path = relativePath(this.opts.process.cwd(), filepath);
-      promise = this.parent.emit('watch', path, event);
+      promise = this.parent.emitParallel('watch', path, event);
     }
 
     return promise
@@ -107,6 +104,6 @@ export default class Watch extends Plugin {
   */
   waitLog(globs) {
     const locations = globs.map(glob => chalk.bold(glob)).join(', ');
-    this.parent.emit('log', `... watch at ${locations}.`);
+    this.parent.emitParallel('log', `... watch at ${locations}.`);
   }
 }
