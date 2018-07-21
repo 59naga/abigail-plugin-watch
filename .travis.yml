@@ -3,9 +3,7 @@ notifications:
 
 # Quick boot options
 sudo: false
-cache:
-  directories:
-    - node_modules
+cache: yarn
 
 # Ignore version tags
 branches:
@@ -20,21 +18,19 @@ env:
 # Language options
 language: node_js
 node_js:
-  - 4
-before_script:
-  - npm prune
+  - 10
 script:
-  - npm run cover
-  - npm run lint
+  - yarn cover
+  - yarn lint
 
 # Npm publish options
 before_deploy:
-  - npm run build
+  - yarn build
 deploy:
   skip_cleanup: true # keep the devDependencies
   provider: npm
   email: i59naga@icloud.com
   api_key:
-    secure: h2eU8yTyD7+6XJR2m1KXQjuIo76jWZZqAknGH2QL4ophHRs7TdnML8ZkwtqMZ1XHhkyW3UeS1KWuIu8+tZdXWMkjz1m9gF5xUgOdBaBSFDFuOMKpfbG15gEUWXk9FdaMBuq1CjMlWfe1LWigXhVcqsfxazz3uC+JUcgY7reHRXE2cb805rlG1aA3M8ML+Sr11tUi5gnLy5yA+8UnZwT8ZVqiARGXP+411Y7of3z9fDnXDJSxeK9tQ5NQ3shgjiOjPwA89FHGxdIHgCSFUHEzTS5f6IkUFnOnK26wBwroSNdISQXsKW6H49o8dST7RjD/rBKF1G3o4tyZ20sXgxwO5sM5qklecj3P6nGZDQ5LsYqDeR54P5tq5hlULag0zuRHvdawSqZb7ZmT27kQzCPfIbS9MVNDklIDa2K9bvqGHVCuyBqrJ2fvNap+3tUAwrOw7gkQr/Fp0HxkXCw/gerx22gKBUD/d5hBdd1PE/YsA8dGTID9hparvGhQBmHgHHvZrcdT9rUIKlgRQABKmIDC6jmfRem+AnltzwWzctSY1+4btJby9MSVrbpgBWoY36xAGqSw0FJE5tZ8aXxSxkvLz6j6qVnWCHbVoOgUgL1WbsIzpsfgs+Rs4qVBnTLIkvTLL1OUjeL2YnaausEUtu3OTVrBKMA96fWW6/ijzIa3Htk=
+    secure: m8q4CZv3jG7Bc6IZPKsHLzKtYghocgjriO/2cJYGeDZR0/iDUaDcjvgdjMn1s4l+3RjWONI3GMTl4M7L6IX2wpeMijIfajTMVnXneIHUfQswzjxBmMfbcItMD67n2ky5szZD7SGdWfqMMXqquHeg9WrBTe6u5eyuFcS+55cPlDB/ut/73rLHlJy/8JSu1B42a3hHd7a+fE41fTyYYErjiL45VjTRCGu1HLlbLieqJOq9AExepqo0MZcXrKUoy1P2aflhqfT+MOBR1IYGJV9ErK/qqTTXUnzLC8wn8O4356FVsu5m42ChPW1/geY9paS1mmsqSRdjwORDZNIrsw+47BMPuPLnIlsCaYtIt0uv+N5FWr2jLBGnCgF+LDTe7qQ/pmn7Xc5eqKyuq9J80m0zUKJZi2YRN118avPNHnjngrzjfz0VybkpMHuj4HOXHUrpd6VPZH/O1aHey/1hXcKbwRh/rR8vevAWZfGy3yz7tqUBQR+/Js0LIjXhh3mSPHrt90lwSjNZ6FYu7Nwyi7IRC8zdY6G4QA0CV1ZBweHzQ/Uo3se5uuCV4vvUvql39jT+XfFVdt+c6oox6DUZo8Gne2g+Wsb21ydbEPu9XcD7sqKDleuRRNLL3SMz221qX6IrOOQV+1V/18ecnvu9+35hx67lInNlm7aEDlp1cgClf7I=
   on:
-    node: 4
+    node: 10
