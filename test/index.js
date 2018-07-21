@@ -25,6 +25,7 @@ describe('', () => {
     .then(() => emitter.emitParallel('launch'))
     .then(() => {
       assert(watch.getProps().plugins.launch.launch.calledOnce);
+      emitter.emitParallel('detach-plugins')
     });
   });
 
@@ -51,6 +52,7 @@ describe('', () => {
     })
     .then(() => {
       assert(watch.getProps().plugins.launch.launch.calledTwice);
+      emitter.emitParallel('detach-plugins')
     });
   });
 
@@ -74,6 +76,8 @@ describe('', () => {
 
       const notifyMessage = stripAnsi(logEvent.args[0][0]);
       assert(notifyMessage === `... watch at ${watch.opts.value}.`);
+
+      emitter.emitParallel('detach-plugins')
     });
   });
 
@@ -91,6 +95,7 @@ describe('', () => {
     .then(() => emitter.emitParallel('launch'))
     .then(() => {
       assert(watch.getProps().plugins.launch.launch.notCalled);
+      emitter.emitParallel('detach-plugins')
     });
   });
 
@@ -100,6 +105,7 @@ describe('', () => {
 
     return emitter.emitParallel('attach-plugins').then(() => {
       assert(watch.globs[0] === 'src/**/*.{js,jsx}');
+      emitter.emitParallel('detach-plugins')
     });
   });
 });
